@@ -167,6 +167,9 @@ export default {
             const id = e.target.value;
             if(id != ''){
                 this.loading = true
+                this.brands = []
+                this.models = []
+                this.types = []
                 axios.get(`api/get_properties/${id}`,{
                     headers: {
                         'Access-Control-Allow-Origin': '*',
@@ -183,6 +186,10 @@ export default {
                     }
                     this.loading = false
                 })
+            }else{
+                this.brands = []
+                this.models = []
+                this.types = []
             }
         },
         getModels(e){
