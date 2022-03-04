@@ -18,7 +18,7 @@
 
                                     <div class="col-md-12">
                                         <select name="main_cate" id="main_cate" class="form-control" @change="getSubCategories($event)">
-                                            <option value="" selected disabled>Select Category</option>
+                                            <option value="">Select Category</option>
                                             <option v-for="category in mainCategories" class="mb-2" :value="category.id" :key="category.id">{{category.name}}</option>
                                         </select>
                                     </div>
@@ -29,7 +29,7 @@
 
                                     <div class="col-md-12">
                                         <select name="sub_cate" id="sub_cate" class="form-control" @change="getProperties($event)">
-                                            <option value="" selected disabled>Select subcategory</option>
+                                            <option value="">Select subcategory</option>
                                             <option v-for="category in subCategories" :value="category.id" :key="category.id">{{category.name}}</option>
                                         </select>
                                     </div>
@@ -40,7 +40,7 @@
 
                                         <div class="col-md-12">
                                             <select name="sub_cate" id="sub_cate" class="form-control">
-                                                <option value="" selected disabled>Select process type</option>
+                                                <option value="">Select process type</option>
                                                 <option value="">Other</option>
                                                 <option value="">Unspecified</option>
                                                 <option v-for="option in options" :value="option.id" :key="option.id">{{option.name}}</option>
@@ -53,7 +53,7 @@
 
                                         <div class="col-md-12">
                                             <select name="sub_cate" id="sub_cate" class="form-control" @change="getModels($event)">
-                                                <option value="" selected disabled>Select Brand</option>
+                                                <option value="">Select Brand</option>
                                                 <option v-for="brand in brands" :value="brand.id" :key="brand.id">{{brand.name}}</option>
                                             </select>
                                         </div>
@@ -65,7 +65,7 @@
 
                                         <div class="col-md-12">
                                             <select name="sub_cate" id="sub_cate" class="form-control" @change="getTypes($event)">
-                                                <option value="" selected disabled>Select Model</option>
+                                                <option value="">Select Model</option>
                                                 <option v-for="model in models" :value="model.id" :key="model.id">{{model.name}}</option>
                                             </select>
                                         </div>
@@ -77,7 +77,7 @@
 
                                         <div class="col-md-12">
                                             <select name="sub_cate" id="sub_cate" class="form-control">
-                                                <option value="" selected disabled>Select Type</option>
+                                                <option value="">Select Type</option>
                                                 <option v-for="type in types" :value="type.id" :key="type.id">{{type.name}}</option>
                                             </select>
                                         </div>
@@ -135,6 +135,10 @@ export default {
         getSubCategories(e){
             this.loading = true
             const id = e.target.value;
+            this.subCategories = []
+            this.brands = []
+            this.models = []
+            this.types = []
             axios.get(`api/get_sub_cats`,{
                 headers: {
                     'Access-Control-Allow-Origin': '*',
@@ -143,7 +147,6 @@ export default {
                 }
             })
             .then(res => {
-                this.subCategories = []
                 var arr = res.data.data.categories.filter(function(elem){
                     if(elem.id == id) {
                         return elem.children

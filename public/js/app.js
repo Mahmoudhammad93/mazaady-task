@@ -2204,6 +2204,10 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       var id = e.target.value;
+      this.subCategories = [];
+      this.brands = [];
+      this.models = [];
+      this.types = [];
       axios.get("api/get_sub_cats", {
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -2211,7 +2215,6 @@ __webpack_require__.r(__webpack_exports__);
           'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
         }
       }).then(function (res) {
-        _this2.subCategories = [];
         var arr = res.data.data.categories.filter(function (elem) {
           if (elem.id == id) {
             return elem.children;
@@ -38388,13 +38391,9 @@ var render = function () {
                           },
                         },
                         [
-                          _c(
-                            "option",
-                            {
-                              attrs: { value: "", selected: "", disabled: "" },
-                            },
-                            [_vm._v("Select Category")]
-                          ),
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("Select Category"),
+                          ]),
                           _vm._v(" "),
                           _vm._l(_vm.mainCategories, function (category) {
                             return _c(
@@ -38436,13 +38435,9 @@ var render = function () {
                           },
                         },
                         [
-                          _c(
-                            "option",
-                            {
-                              attrs: { value: "", selected: "", disabled: "" },
-                            },
-                            [_vm._v("Select subcategory")]
-                          ),
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("Select subcategory"),
+                          ]),
                           _vm._v(" "),
                           _vm._l(_vm.subCategories, function (category) {
                             return _c(
@@ -38481,17 +38476,9 @@ var render = function () {
                                 attrs: { name: "sub_cate", id: "sub_cate" },
                               },
                               [
-                                _c(
-                                  "option",
-                                  {
-                                    attrs: {
-                                      value: "",
-                                      selected: "",
-                                      disabled: "",
-                                    },
-                                  },
-                                  [_vm._v("Select process type")]
-                                ),
+                                _c("option", { attrs: { value: "" } }, [
+                                  _vm._v("Select process type"),
+                                ]),
                                 _vm._v(" "),
                                 _c("option", { attrs: { value: "" } }, [
                                   _vm._v("Other"),
@@ -38541,17 +38528,9 @@ var render = function () {
                                 },
                               },
                               [
-                                _c(
-                                  "option",
-                                  {
-                                    attrs: {
-                                      value: "",
-                                      selected: "",
-                                      disabled: "",
-                                    },
-                                  },
-                                  [_vm._v("Select Brand")]
-                                ),
+                                _c("option", { attrs: { value: "" } }, [
+                                  _vm._v("Select Brand"),
+                                ]),
                                 _vm._v(" "),
                                 _vm._l(_vm.brands, function (brand) {
                                   return _c(
@@ -38597,17 +38576,9 @@ var render = function () {
                                 },
                               },
                               [
-                                _c(
-                                  "option",
-                                  {
-                                    attrs: {
-                                      value: "",
-                                      selected: "",
-                                      disabled: "",
-                                    },
-                                  },
-                                  [_vm._v("Select Model")]
-                                ),
+                                _c("option", { attrs: { value: "" } }, [
+                                  _vm._v("Select Model"),
+                                ]),
                                 _vm._v(" "),
                                 _vm._l(_vm.models, function (model) {
                                   return _c(
@@ -38648,17 +38619,9 @@ var render = function () {
                                 attrs: { name: "sub_cate", id: "sub_cate" },
                               },
                               [
-                                _c(
-                                  "option",
-                                  {
-                                    attrs: {
-                                      value: "",
-                                      selected: "",
-                                      disabled: "",
-                                    },
-                                  },
-                                  [_vm._v("Select Type")]
-                                ),
+                                _c("option", { attrs: { value: "" } }, [
+                                  _vm._v("Select Type"),
+                                ]),
                                 _vm._v(" "),
                                 _vm._l(_vm.types, function (type) {
                                   return _c(
