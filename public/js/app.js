@@ -2202,97 +2202,119 @@ __webpack_require__.r(__webpack_exports__);
     getSubCategories: function getSubCategories(e) {
       var _this2 = this;
 
-      this.loading = true;
       var id = e.target.value;
-      this.subCategories = [];
-      this.brands = [];
-      this.models = [];
-      this.types = [];
-      axios.get("api/get_sub_cats", {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-        }
-      }).then(function (res) {
-        var arr = res.data.data.categories.filter(function (elem) {
-          if (elem.id == id) {
-            return elem.children;
+
+      if (id !== '') {
+        this.loading = true;
+        this.subCategories = [];
+        this.brands = [];
+        this.models = [];
+        this.types = [];
+        axios.get("api/get_sub_cats", {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
           }
+        }).then(function (res) {
+          var arr = res.data.data.categories.filter(function (elem) {
+            if (elem.id == id) {
+              return elem.children;
+            }
+          });
+          _this2.subCategories = arr[0].children;
+          _this2.loading = false;
         });
-        _this2.subCategories = arr[0].children;
-        _this2.loading = false;
-      });
+      } else {
+        this.subCategories = [];
+        this.brands = [];
+        this.models = [];
+        this.types = [];
+      }
     },
     getProperties: function getProperties(e) {
       var _this3 = this;
 
-      this.loading = true;
       var id = e.target.value;
-      axios.get("api/get_properties/".concat(id), {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-        }
-      }).then(function (res) {
-        console.log(res.data);
-        _this3.options = [];
 
-        if (res.data.data.length > 0) {
-          _this3.options = res.data.data[0].options;
-          _this3.brands = res.data.data[1].options;
-          res.data.data[0].list == false ? _this3.show = true : _this3.show = false;
-        }
+      if (id != '') {
+        this.loading = true;
+        axios.get("api/get_properties/".concat(id), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+          }
+        }).then(function (res) {
+          console.log(res.data);
+          _this3.options = [];
 
-        _this3.loading = false;
-      });
+          if (res.data.data.length > 0) {
+            _this3.options = res.data.data[0].options;
+            _this3.brands = res.data.data[1].options;
+            res.data.data[0].list == false ? _this3.show = true : _this3.show = false;
+          }
+
+          _this3.loading = false;
+        });
+      }
     },
     getModels: function getModels(e) {
       var _this4 = this;
 
-      this.loading = true;
       var id = e.target.value;
-      axios.get("api/get_models/".concat(id), {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-        }
-      }).then(function (res) {
-        console.log(res.data);
-        _this4.options = [];
 
-        if (res.data.data.length > 0) {
-          _this4.models = res.data.data[0].options;
-        }
+      if (id != '') {
+        this.loading = true;
+        axios.get("api/get_models/".concat(id), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+          }
+        }).then(function (res) {
+          console.log(res.data);
+          _this4.options = [];
 
-        _this4.showModels = true;
-        _this4.loading = false;
-      });
+          if (res.data.data.length > 0) {
+            _this4.models = res.data.data[0].options;
+          }
+
+          _this4.showModels = true;
+          _this4.loading = false;
+        });
+      } else {
+        this.models = [];
+        this.types = [];
+      }
     },
     getTypes: function getTypes(e) {
       var _this5 = this;
 
-      this.loading = true;
       var id = e.target.value;
-      axios.get("api/get_models/".concat(id), {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-        }
-      }).then(function (res) {
-        console.log(res.data);
-        _this5.options = [];
 
-        if (res.data.data.length > 0) {
-          _this5.types = res.data.data[0].options;
-        }
+      if (id != '') {
+        this.loading = true;
+        axios.get("api/get_models/".concat(id), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+          }
+        }).then(function (res) {
+          console.log(res.data);
+          _this5.options = [];
 
-        _this5.showTypes = true;
-        _this5.loading = false;
-      });
+          if (res.data.data.length > 0) {
+            _this5.types = res.data.data[0].options;
+          }
+
+          _this5.showTypes = true;
+          _this5.loading = false;
+        });
+      } else {
+        this.types = [];
+      }
     }
   }
 });

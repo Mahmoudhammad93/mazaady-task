@@ -133,86 +133,104 @@ export default {
             })
         },
         getSubCategories(e){
-            this.loading = true
             const id = e.target.value;
-            this.subCategories = []
-            this.brands = []
-            this.models = []
-            this.types = []
-            axios.get(`api/get_sub_cats`,{
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                }
-            })
-            .then(res => {
-                var arr = res.data.data.categories.filter(function(elem){
-                    if(elem.id == id) {
-                        return elem.children
+            if(id !== ''){
+                this.loading = true
+                this.subCategories = []
+                this.brands = []
+                this.models = []
+                this.types = []
+                axios.get(`api/get_sub_cats`,{
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
                     }
-                });
-                this.subCategories = arr[0].children
-                this.loading = false
-            })
+                })
+                .then(res => {
+                    var arr = res.data.data.categories.filter(function(elem){
+                        if(elem.id == id) {
+                            return elem.children
+                        }
+                    });
+                    this.subCategories = arr[0].children
+                    this.loading = false
+                })
+            }else{
+                this.subCategories = []
+                this.brands = []
+                this.models = []
+                this.types = []
+            }
         },
         getProperties(e){
-            this.loading = true
             const id = e.target.value;
-            axios.get(`api/get_properties/${id}`,{
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                }
-            }).then(res => {
-                console.log(res.data)
-                this.options = []
-                if(res.data.data.length > 0){
-                    this.options = res.data.data[0].options;
-                    this.brands = res.data.data[1].options;
-                    (res.data.data[0].list == false)? this.show = true : this.show = false;
-                }
-                this.loading = false
-            })
+            if(id != ''){
+                this.loading = true
+                axios.get(`api/get_properties/${id}`,{
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                    }
+                }).then(res => {
+                    console.log(res.data)
+                    this.options = []
+                    if(res.data.data.length > 0){
+                        this.options = res.data.data[0].options;
+                        this.brands = res.data.data[1].options;
+                        (res.data.data[0].list == false)? this.show = true : this.show = false;
+                    }
+                    this.loading = false
+                })
+            }
         },
         getModels(e){
-            this.loading = true
             const id = e.target.value;
-            axios.get(`api/get_models/${id}`,{
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                }
-            }).then(res => {
-                console.log(res.data)
-                this.options = []
-                if(res.data.data.length > 0){
-                    this.models = res.data.data[0].options;
-                }
-                this.showModels = true
-                this.loading = false
-            })
+            if(id != ''){
+                this.loading = true
+                axios.get(`api/get_models/${id}`,{
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                    }
+                }).then(res => {
+                    console.log(res.data)
+                    this.options = []
+                    if(res.data.data.length > 0){
+                        this.models = res.data.data[0].options;
+                    }
+                    this.showModels = true
+                    this.loading = false
+                })
+            }else{
+                this.models = []
+                this.types = []
+            }
         },
         getTypes(e){
-            this.loading = true
             const id = e.target.value;
-            axios.get(`api/get_models/${id}`,{
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                }
-            }).then(res => {
-                console.log(res.data)
-                this.options = []
-                if(res.data.data.length > 0){
-                    this.types = res.data.data[0].options;
-                }
-                this.showTypes = true
-                this.loading = false
-            })
+            if(id != ''){
+                this.loading = true
+                axios.get(`api/get_models/${id}`,{
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                    }
+                }).then(res => {
+                    console.log(res.data)
+                    this.options = []
+                    if(res.data.data.length > 0){
+                        this.types = res.data.data[0].options;
+                    }
+                    this.showTypes = true
+                    this.loading = false
+                })
+            }else{
+                this.types = []
+            }
         }
     }
 }
