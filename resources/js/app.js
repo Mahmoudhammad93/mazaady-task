@@ -14,7 +14,7 @@ Vue.component('Loading', loading);
 const routes = [
     {
       path: "/",
-      name: "Home",
+      name: "task",
       component: task,
     }
 ];

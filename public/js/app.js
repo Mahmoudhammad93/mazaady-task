@@ -2174,7 +2174,16 @@ __webpack_require__.r(__webpack_exports__);
       showModels: false,
       showTypes: false,
       show: false,
-      loading: false
+      loading: false,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+      },
+      sub_cat_id: 0,
+      properity_id: 0,
+      model_id: 0,
+      type_id: 0
     };
   },
   mounted: function mounted() {
@@ -2186,142 +2195,103 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       axios.get("api/get_all_cats", {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-        }
+        headers: this.headers
       }).then(function (res) {
-        // var valObj = res.data.data.categories.filter(function(elem){
-        //     if(elem.id == 12) console.log(elem.children);
-        // });
         _this.mainCategories = res.data.data.categories;
+        _this.loading = false;
+      })["catch"](function (err) {
+        console.log(err);
         _this.loading = false;
       });
     },
-    getSubCategories: function getSubCategories(e) {
+    getSubCategories: function getSubCategories() {
       var _this2 = this;
 
-      var id = e.target.value;
-
-      if (id !== '') {
-        this.loading = true;
-        this.subCategories = [];
-        this.brands = [];
-        this.models = [];
-        this.types = [];
-        axios.get("api/get_sub_cats", {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
-        }).then(function (res) {
-          var arr = res.data.data.categories.filter(function (elem) {
-            if (elem.id == id) {
-              return elem.children;
-            }
-          });
-          _this2.subCategories = arr[0].children;
-          _this2.loading = false;
-        });
-      } else {
-        this.subCategories = [];
-        this.brands = [];
-        this.models = [];
-        this.types = [];
-      }
+      var id = this.sub_cat_id;
+      this.loading = true;
+      this.subCategories = [];
+      this.brands = [];
+      this.models = [];
+      this.types = [];
+      axios.get("api/get_sub_cats").then(function (res) {
+        var children = res.data.data.categories.find(function (x) {
+          return x.id == id;
+        }).children;
+        _this2.subCategories = children;
+        _this2.loading = false;
+      })["catch"](function (err) {
+        console.log(err);
+        _this2.loading = false;
+      });
     },
-    getProperties: function getProperties(e) {
+    getProperties: function getProperties() {
       var _this3 = this;
 
-      var id = e.target.value;
+      var id = this.properity_id;
+      this.loading = true;
+      this.brands = [];
+      this.models = [];
+      this.types = [];
+      axios.get("api/get_properties/".concat(id)).then(function (res) {
+        console.log(res.data);
+        _this3.options = [];
 
-      if (id != '') {
-        this.loading = true;
-        this.brands = [];
-        this.models = [];
-        this.types = [];
-        axios.get("api/get_properties/".concat(id), {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
-        }).then(function (res) {
-          console.log(res.data);
-          _this3.options = [];
+        if (res.data.data.length > 0) {
+          _this3.options = res.data.data[0].options;
+          _this3.brands = res.data.data[1].options;
+          res.data.data[0].list == false ? _this3.show = true : _this3.show = false;
+        }
 
-          if (res.data.data.length > 0) {
-            _this3.options = res.data.data[0].options;
-            _this3.brands = res.data.data[1].options;
-            res.data.data[0].list == false ? _this3.show = true : _this3.show = false;
-          }
-
-          _this3.loading = false;
-        });
-      } else {
-        this.brands = [];
-        this.models = [];
-        this.types = [];
-      }
+        _this3.loading = false;
+      })["catch"](function (err) {
+        console.log(err);
+        _this3.loading = false;
+      });
     },
-    getModels: function getModels(e) {
+    getModels: function getModels() {
       var _this4 = this;
 
-      var id = e.target.value;
+      var id = this.model_id;
+      this.loading = true;
+      this.models = [];
+      this.types = [];
+      axios.get("api/get_models/".concat(id)).then(function (res) {
+        console.log(res.data);
+        _this4.options = [];
 
-      if (id != '') {
-        this.loading = true;
-        axios.get("api/get_models/".concat(id), {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
-        }).then(function (res) {
-          console.log(res.data);
-          _this4.options = [];
+        if (res.data.data.length > 0) {
+          _this4.models = res.data.data[0].options;
+        }
 
-          if (res.data.data.length > 0) {
-            _this4.models = res.data.data[0].options;
-          }
-
-          _this4.showModels = true;
-          _this4.loading = false;
-        });
-      } else {
-        this.models = [];
-        this.types = [];
-      }
+        _this4.showModels = true;
+        _this4.loading = false;
+      })["catch"](function (err) {
+        console.log(err);
+        _this4.loading = false;
+      });
     },
-    getTypes: function getTypes(e) {
+    getTypes: function getTypes() {
       var _this5 = this;
 
-      var id = e.target.value;
+      var id = this.type_id;
+      this.types = [];
+      this.loading = true;
+      axios.get("api/get_models/".concat(id), {
+        header: this.headers
+      }).then(function (res) {
+        console.log(res.data);
+        _this5.options = [];
 
-      if (id != '') {
-        this.loading = true;
-        axios.get("api/get_models/".concat(id), {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-          }
-        }).then(function (res) {
-          console.log(res.data);
-          _this5.options = [];
+        if (res.data.data.length > 0) {
+          _this5.types = res.data.data[0].options;
+        }
 
-          if (res.data.data.length > 0) {
-            _this5.types = res.data.data[0].options;
-          }
-
-          _this5.showTypes = true;
-          _this5.loading = false;
-        });
-      } else {
-        this.types = [];
-      }
+        _this5.showTypes = true;
+        _this5.loading = false;
+      })["catch"](function (err) {
+        console.log(err);
+        _this5.loading = false;
+      });
     }
   }
 });
@@ -2354,7 +2324,7 @@ vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('task', _components_task_v
 vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('Loading', _components_loading_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var routes = [{
   path: "/",
-  name: "Home",
+  name: "task",
   component: _components_task_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
 }];
 var VueRouter = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
@@ -38411,16 +38381,39 @@ var render = function () {
                       _c(
                         "select",
                         {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.sub_cat_id,
+                              expression: "sub_cat_id",
+                            },
+                          ],
                           staticClass: "form-control",
                           attrs: { name: "main_cate", id: "main_cate" },
                           on: {
-                            change: function ($event) {
-                              return _vm.getSubCategories($event)
-                            },
+                            change: [
+                              function ($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function (o) {
+                                    return o.selected
+                                  })
+                                  .map(function (o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.sub_cat_id = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                              function ($event) {
+                                return _vm.getSubCategories()
+                              },
+                            ],
                           },
                         },
                         [
-                          _c("option", { attrs: { value: "" } }, [
+                          _c("option", { attrs: { value: "0" } }, [
                             _vm._v("Select Category"),
                           ]),
                           _vm._v(" "),
@@ -38455,16 +38448,39 @@ var render = function () {
                       _c(
                         "select",
                         {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.properity_id,
+                              expression: "properity_id",
+                            },
+                          ],
                           staticClass: "form-control",
                           attrs: { name: "sub_cate", id: "sub_cate" },
                           on: {
-                            change: function ($event) {
-                              return _vm.getProperties($event)
-                            },
+                            change: [
+                              function ($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function (o) {
+                                    return o.selected
+                                  })
+                                  .map(function (o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.properity_id = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                              function ($event) {
+                                return _vm.getProperties()
+                              },
+                            ],
                           },
                         },
                         [
-                          _c("option", { attrs: { value: "" } }, [
+                          _c("option", { attrs: { value: "0" } }, [
                             _vm._v("Select subcategory"),
                           ]),
                           _vm._v(" "),
@@ -38548,16 +38564,43 @@ var render = function () {
                             _c(
                               "select",
                               {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.model_id,
+                                    expression: "model_id",
+                                  },
+                                ],
                                 staticClass: "form-control",
                                 attrs: { name: "sub_cate", id: "sub_cate" },
                                 on: {
-                                  change: function ($event) {
-                                    return _vm.getModels($event)
-                                  },
+                                  change: [
+                                    function ($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call(
+                                          $event.target.options,
+                                          function (o) {
+                                            return o.selected
+                                          }
+                                        )
+                                        .map(function (o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.model_id = $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    function ($event) {
+                                      return _vm.getModels()
+                                    },
+                                  ],
                                 },
                               },
                               [
-                                _c("option", { attrs: { value: "" } }, [
+                                _c("option", { attrs: { value: "0" } }, [
                                   _vm._v("Select Brand"),
                                 ]),
                                 _vm._v(" "),
@@ -38596,16 +38639,43 @@ var render = function () {
                             _c(
                               "select",
                               {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.type_id,
+                                    expression: "type_id",
+                                  },
+                                ],
                                 staticClass: "form-control",
                                 attrs: { name: "sub_cate", id: "sub_cate" },
                                 on: {
-                                  change: function ($event) {
-                                    return _vm.getTypes($event)
-                                  },
+                                  change: [
+                                    function ($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call(
+                                          $event.target.options,
+                                          function (o) {
+                                            return o.selected
+                                          }
+                                        )
+                                        .map(function (o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.type_id = $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    function ($event) {
+                                      return _vm.getTypes()
+                                    },
+                                  ],
                                 },
                               },
                               [
-                                _c("option", { attrs: { value: "" } }, [
+                                _c("option", { attrs: { value: "0" } }, [
                                   _vm._v("Select Model"),
                                 ]),
                                 _vm._v(" "),
